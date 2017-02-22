@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Your page title here :)</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <script type="text/javascript">
+
+    // html manipulation
+    var Dom = {
+
+      get: function(id) {
+        if (typeof id === 'string') {
+          return document.getElementById(id);
+        } else {
+          return id;
+        }
+      },
+
+      add: function(id, tag, classes, parentId) {
+          var parent = document.getElementById(parentId);
+          var newElement = document.createElement(tag);
+          newElement.setAttribute('id', id);
+          newElement.setAttribute('class', classes);
+          parent.appendChild(newElement);
+          return newElement;
+      },
+
+      remove: function(id) {
+          var element = this.get(id);
+          element.parentNode.removeChild(element);
+      }
+    };
+
+    var Event = {
+
+      add: function() {
+        if (window.addEventListener) {
+          return function(id, type, fn) {
+            Dom.get(id).addEventListener(type, fn, false);
+          };
+        } else if (window.attachEvent) {
+          return function(id, type, fn) {
+            var f = function() {
+              fn.call(Dom.get(id), window.event);
+            };
+            Dom.get(id).attachEvent('on' + type, f);
+          };
+        }
+      }()
+    };
+
+
+    // actions
+
+    function Action(name, execute) {
+      this.name = name;
+      this.execute = execute;
+    }
+
+    Action.prototype = {
+      id: function(col) {
+        return this.name + col; 
+      },
+
+      createButton: function(col) {
+        Dom.add(this.id(col), 'a', 'button', 'actions' + col).innerHTML = this.name;
+        Event.add(this.id(col), 'click', function() {
+          this.execute();
+        });
+      }
+    };
+
+    function clearActions(col) {
+      var colNode = Dom.get('actions' + col);
+      while (colNode.firstChild) {
+        colNode.removeChild(colNode.firstChild);
+      }
+    }
+
+    function populateActions(actions, cols) {
+      for (var i = 0; i < cols.length; i++) {
+        clearActions(i);
+        for (var j = 0; j < actions.length; j++) {
+          actions[j].createButton[i];
+        }
+      }
+    }
+
+  </script>
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+      <div class="one-half column" style="">
+        actor 1
+      </div>
+      <div class="one-half column" style="">
+        actor 2
+      </div>
+    </div>
+    <div class="row">
+      <div class="one-half column" style="" id="actions0">
+        
+      </div>
+      <div class="one-half column" style="" id="actions1">
+        
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // Actions list
+    var kiss = new Action('Kiss', function() {});
+    for (var i = 0; i < 2; i++) {
+      kiss.createButton(i);
+    }
+
+    
+
+
+  </script>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
